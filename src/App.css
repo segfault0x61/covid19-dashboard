@@ -1,6 +1,15 @@
+body {
+  background-color: #fef6fa;
+}
+
 .appHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+}
+
+.appStats {
+  display: flex;
+  justify-content: space-between;
 }
