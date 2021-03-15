@@ -2,6 +2,16 @@ body {
   background-color: #fef6fa;
 }
 
+.app {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px;
+}
+
+.appLeft {
+  flex: 0.9;
+}
+
 .appHeader {
   display: flex;
   align-items: center;
@@ -12,4 +22,10 @@ body {
 .appStats {
   display: flex;
   justify-content: space-between;
+}
+
+@media (max-width: 990px) {
+  .app {
+    flex-direction: column;
+  }
 }
