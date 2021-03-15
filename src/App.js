@@ -8,8 +8,10 @@ import {
 import { useEffect, useState } from 'react';
 import './App.css';
 import InfoBox from './components/InfoBox';
+import LineGraph from './components/LineGraph';
 import Map from './components/Map';
 import Table from './components/Table';
+import { sortData } from './util';
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -26,7 +28,8 @@ function App() {
             name: item.country,
             value: item.countryInfo.iso2,
           }));
-          setTableData(data);
+          const sortedData = sortData(data);
+          setTableData(sortedData);
           setCountries(countries);
         });
     };
@@ -95,6 +98,7 @@ function App() {
           <h3>Live Cases by Country</h3>
           <Table countries={tableData} />
           <h3>Worldwide New Cases</h3>
+          <LineGraph />
         </CardContent>
       </Card>
     </div>
