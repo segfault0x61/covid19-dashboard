@@ -12,3 +12,4 @@ Click [here](https://covid19-world-dashboard.netlify.app/) to visit the site.
 * Hooks
 * Material UI
 * Leaflet and React Leaflet
+* Chart.js
