@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react';
+import './App.css';
+import InfoBox from './components/InfoBox';
+import Map from './components/Map';
 import {
   capitalize,
   Card,
@@ -6,15 +10,11 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-import './App.css';
-import InfoBox from './components/InfoBox';
-import LineGraph from './components/LineGraph';
-import Map from './components/Map';
 import Table from './components/Table';
 import { sortData, prettyPrintStat } from './util';
-import 'leaflet/dist/leaflet.css';
 import numeral from 'numeral';
+import LineGraph from './components/LineGraph';
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -25,7 +25,6 @@ function App() {
   const [mapZoom, setMapZoom] = useState(3);
   const [mapCountries, setMapCountries] = useState([]);
   const [casesType, setCasesType] = useState('cases');
-
   useEffect(() => {
     const getData = async () => {
       await fetch('https://disease.sh/v3/covid-19/countries')
@@ -43,13 +42,11 @@ function App() {
     };
     getData();
   }, []);
-
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
       .then((response) => response.json())
       .then((data) => setCountryInfo(data));
   }, []);
-
   const onCountryChange = async (e) => {
     const url =
       e.target.value === 'worldwide'
@@ -59,18 +56,24 @@ function App() {
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setCountry(e.target.value);
         setCountryInfo(data);
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+
+        try {
+          setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        } catch {
+          setMapCenter([34.80746, -40.4796]);
+        }
+
         setMapZoom(4);
       });
   };
-
   return (
     <div className="app">
       <div className="appLeft">
         <div className="appHeader">
-          <h1>COVID-19 Dashboard</h1>
+          <h1>COVID-19 tracker</h1>
           <FormControl className="appDropdown">
             <Select
               variant="outlined"
@@ -86,20 +89,24 @@ function App() {
         </div>
         <div className="appStats">
           <InfoBox
-            onClick={() => setCasesType('cases')}
+            onClick={(e) => setCasesType('cases')}
             title="Coronavirus Cases"
+            active={casesType === 'cases'}
             cases={prettyPrintStat(countryInfo.todayCases)}
             total={numeral(countryInfo.cases).format('0.0a')}
           />
           <InfoBox
-            onClick={() => setCasesType('recovered')}
+            onClick={(e) => setCasesType('recovered')}
             title="Recovered"
+            isGreen
+            active={casesType === 'recovered'}
             cases={prettyPrintStat(countryInfo.todayRecovered)}
             total={numeral(countryInfo.recovered).format('0.0a')}
           />
           <InfoBox
-            onClick={() => setCasesType('deaths')}
+            onClick={(e) => setCasesType('deaths')}
             title="Deaths"
+            active={casesType === 'deaths'}
             cases={prettyPrintStat(countryInfo.todayDeaths)}
             total={numeral(countryInfo.deaths).format('0.0a')}
           />
